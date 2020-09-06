@@ -1,2 +1,1 @@
-db_path: "content/sqlite3/database/database.db"
 pragma: {}
