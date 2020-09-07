@@ -45,7 +45,7 @@ class Sqlite3Manager(Manager):
 
         self.__sessions[session_id].close()
 
-        self.__sessions[session_id] = None
+        del self.__sessions[session_id]
 
     @staticmethod
     def __build_session_id(module_name, storage_id):
