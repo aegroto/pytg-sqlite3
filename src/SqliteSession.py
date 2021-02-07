@@ -1,14 +1,14 @@
 import logging, sqlite3, threading
 
 class SqliteSession():
-    def __init__(self, db_path, pragma={}):
+    def __init__(self, db_path, pragma={}, check_same_thread=True):
         self.__logger = logging.getLogger("SqliteSession('{}')".format(db_path))
 
         self.__lock = threading.Lock()
 
         self.__cursor = None
 
-        self.__connection = sqlite3.connect(db_path)
+        self.__connection = sqlite3.connect(db_path, check_same_thread=check_same_thread)
         self.__connection.row_factory = sqlite3.Row
 
         self.__cursor = self.__connection.cursor()

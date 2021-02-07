@@ -1,21 +1,9 @@
-import logging, sqlite3
-
-from modules.pytg.Manager import Manager
-from modules.pytg.load import manager, get_module_content_folder
+from pytg.Manager import Manager
+from pytg.load import manager, get_module_content_folder
 
 from .SqliteSession import SqliteSession
 
 class Sqlite3Manager(Manager):
-    @staticmethod
-    def initialize():
-        Sqlite3Manager.__instance = Sqlite3Manager()
-
-        return
-
-    @staticmethod
-    def load():
-        return Sqlite3Manager.__instance
-
     def __init__(self):
         self.__sessions = {}
 
@@ -23,7 +11,7 @@ class Sqlite3Manager(Manager):
     # SQLite3 interface #
     ######################
 
-    def create_session(self, module_name, storage_id, session_id=None, pragma=None):
+    def create_session(self, module_name, storage_id, session_id=None, pragma=None, thread_safe=True):
         if not session_id:
             session_id = self.__build_session_id(module_name, storage_id)
 
@@ -35,7 +23,7 @@ class Sqlite3Manager(Manager):
 
             db_path = "{}/sqlite3/{}.db".format(get_module_content_folder(module_name), storage_id)
 
-            self.__sessions[session_id] = SqliteSession(db_path, pragma)
+            self.__sessions[session_id] = SqliteSession(db_path, pragma, check_same_thread=thread_safe)
 
         return self.__sessions[session_id]
 
